@@ -12,7 +12,7 @@ public class AmatriceEnvironmentState implements EnvironmentState, FullyObservab
 
 	private Map<String, AmatriceEnviroment.LocationState> state;
 	private Map<Agent, String> agentLocations;
-	public char agentFront;
+	public int agentFront;	// 6: direita	2: abaixo	4: esquerda		8: acima
 	
 	/**
 	 * Constructor

@@ -22,7 +22,7 @@ public class ReflexDroid extends AbstractAgent {
 
 		rules.add(new Rule(new EQUALCondition(AmatriceEnvironmentPercept.ATTRIBUTE_STATE,
 				AmatriceEnviroment.LocationState.None),
-				AmatriceEnviroment.ACTION_MOVE_FORWARD));
+				AmatriceEnviroment.ACTION_MOVE));
 		
 		rules.add(new Rule(new EQUALCondition(AmatriceEnvironmentPercept.ATTRIBUTE_STATE,
 				AmatriceEnviroment.LocationState.Human),

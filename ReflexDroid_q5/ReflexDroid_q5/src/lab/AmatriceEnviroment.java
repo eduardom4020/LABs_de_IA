@@ -1,5 +1,7 @@
 package lab;
 
+import java.util.Random;
+
 import aima.core.agent.Action;
 import aima.core.agent.Agent;
 import aima.core.agent.Percept;
@@ -29,19 +31,31 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 		String nextLocation;
 		LocationState state;
 		
-		if ((ACTION_MOVE == action)) {
+		if ((ACTION_MOVE == action)) 
+		{
 			// get current agent location
 			currentLocation = envState.getAgentLocation(agent);
 			parts = currentLocation.split(",");
+			Integer X = Integer.valueOf(parts[0].substring(1));
+			Integer Y = Integer.valueOf(parts[1].substring(0, parts[1].length()-1));
 			
-			if(envState.agentFront == 'x')
+			switch (envState.agentFront)
 			{
-			//pegamos o numero da coordenada X e adicionamos 1 a mesma				
-				nextLocation = "(" + (Integer.valueOf(parts[0].substring(1)) + 1) + "," + parts[1];
-			}
-			else
-			{
-				nextLocation = parts[0] + "," + (Integer.valueOf(parts[1].substring(0, parts[1].length()-1)) + 1) + ")";
+				case 6:
+					nextLocation = "(" + (X + 1) + "," + Y + ")";					
+					break;
+				case 8:
+					nextLocation = "(" + X + "," + (Y - 1) + ")";
+					break;
+				case 4:
+					nextLocation = "(" + (X - 1) + "," + Y + ")";					
+					break;
+				case 2:
+					nextLocation = "(" + X + "," + (Y + 1) + ")";
+					break;
+				default:
+					nextLocation = null;
+					break;
 			}
 			
 			state = envState.getLocationState(nextLocation);
@@ -53,7 +67,29 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 			}
 			else // se nao, o agente sofre uma rotacao em 90 graus randomicamente
 			{
-				
+				Random rd = new Random();
+				if(rd.nextInt(1) == 1)
+				{
+				//rotaciona -90
+					switch (envState.agentFront)
+					{
+						case 6: envState.agentFront = 2; break;
+						case 8: envState.agentFront = 6; break;
+						case 4: envState.agentFront = 8; break;
+						case 2: envState.agentFront = 4; break;
+					}
+				}
+				else
+				{
+				//rotaciona 90
+					switch (envState.agentFront)
+					{
+						case 6: envState.agentFront = 8; break;
+						case 8: envState.agentFront = 4; break;
+						case 4: envState.agentFront = 2; break;
+						case 2: envState.agentFront = 6; break;
+					}
+				}
 			}
 
 		}
@@ -62,13 +98,9 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 			currentLocation = envState.getAgentLocation(agent);
 
 			state = envState.getLocationState(currentLocation);
-			if (state == LocationState.Human) {
-				System.out.println("A HUMAN!! DON'T WORRY, CAUSE I'M HERE!!");
-				
-				envState.setLocationState(envState.getAgentLocation(agent), LocationState.None);
-				
-		
-				
+			if (state == LocationState.Human) 
+			{				
+				envState.setLocationState(envState.getAgentLocation(agent), LocationState.None);					
 			}
 			
 		if ((ACTION_TAKE_OFF == action))
@@ -84,7 +116,7 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 	@Override
 	public void addAgent(Agent a) {
 		envState.setAgentLocation(a, "(1,1)");
-		envState.agentFront = 'x';
+		envState.agentFront = 6;
 		super.addAgent(a);
 	}
 
