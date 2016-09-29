@@ -91,9 +91,10 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 					}
 				}
 			}
-
+			performanceMeasures.replace(agent, getPerformanceMeasure(agent)-1);
 		}
-		if (ACTION_GRAB == action) {
+		if (ACTION_GRAB == action) 
+		{
 			
 			currentLocation = envState.getAgentLocation(agent);
 
@@ -101,16 +102,16 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 			if (state == LocationState.Human) 
 			{				
 				envState.setLocationState(envState.getAgentLocation(agent), LocationState.None);					
-			}
+			}	
 			
+			performanceMeasures.replace(agent, getPerformanceMeasure(agent)+100);
+		}
 		if ((ACTION_TAKE_OFF == action))
 		{
-
-		}			
-			
-
+			//Nao eh necessaria, pois a simulacao irah acabar apos 1500 passos
+			//tambem nao cabe ao robo saber quantos humanos existem no ambiente,
+			//por isso a condicao de parada nao serah definida.
 		}
-		// Complete the other actions
 	}
 
 	@Override

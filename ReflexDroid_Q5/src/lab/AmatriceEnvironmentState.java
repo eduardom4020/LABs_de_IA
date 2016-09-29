@@ -26,16 +26,8 @@ public class AmatriceEnvironmentState implements EnvironmentState, FullyObservab
 	private void initWorld() {
 		boolean putHuman=false;
 		
-		// TODO Auto-generated method stub
-		// Fill the AmatriceEnviroment specification
-		// call the fill method bellow filling each stage
-		
-		// Example:
-		// fill(LocationState.Human, LocationState.Rock, LocationState.Human);
-		
 		Random rd = new Random();
 		
-		int n = rd.nextInt(15 - 8) + 8; //faz range de 8 a 15
 		this.state.clear();
 		
 		for(int i=0; i<15; i++)
@@ -72,7 +64,6 @@ public class AmatriceEnvironmentState implements EnvironmentState, FullyObservab
 	}
 	
 
-	@Override
 	public String getAgentLocation(Agent a) {
 		return agentLocations.get(a);
 	}
@@ -87,7 +78,6 @@ public class AmatriceEnvironmentState implements EnvironmentState, FullyObservab
 		agentLocations.put(a, location);
 	}
 
-	@Override
 	public AmatriceEnviroment.LocationState getLocationState(String location) {
 		return state.get(location);
 	}
