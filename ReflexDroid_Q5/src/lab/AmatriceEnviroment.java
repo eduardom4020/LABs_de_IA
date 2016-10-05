@@ -1,5 +1,8 @@
 package lab;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 
 import aima.core.agent.Action;
@@ -30,6 +33,7 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 		String currentLocation;
 		String nextLocation;
 		LocationState state;
+		String action_for_emulation=null;
 		
 		if ((ACTION_MOVE == action)) 
 		{
@@ -64,6 +68,8 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 			if((state == LocationState.None) || (state == LocationState.Human))
 			{
 				envState.setAgentLocation(agent, nextLocation);
+				
+				action_for_emulation = "moved-";
 			}
 			else // se nao, o agente sofre uma rotacao em 90 graus randomicamente
 			{
@@ -91,7 +97,10 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 					}
 				}
 			}
-			performanceMeasures.replace(agent, getPerformanceMeasure(agent)-1);
+			
+			action_for_emulation = "turned-" + envState.agentFront;
+			
+			performanceMeasures.put(agent, getPerformanceMeasure(agent)-1);
 		}
 		if (ACTION_GRAB == action) 
 		{
@@ -104,7 +113,9 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 				envState.setLocationState(envState.getAgentLocation(agent), LocationState.None);					
 			}	
 			
-			performanceMeasures.replace(agent, getPerformanceMeasure(agent)+100);
+			action_for_emulation = "rescued-";
+			
+			performanceMeasures.put(agent, getPerformanceMeasure(agent)+100);
 		}
 		if ((ACTION_TAKE_OFF == action))
 		{
@@ -112,6 +123,18 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 			//tambem nao cabe ao robo saber quantos humanos existem no ambiente,
 			//por isso a condicao de parada nao serah definida.
 		}
+		
+	//para fins de plot: grava cada acao feita pelo agente
+		try 
+		{
+			FileWriter fw = new FileWriter(new File("simulation_output"+ AmatriceProg.SIMULATION_NUMBER +".txt"), true);
+			fw.write(envState.getAgentLocation(agent) + ":" + action_for_emulation);
+			fw.write(System.lineSeparator());
+			fw.close();
+			
+		} catch (IOException e) {e.printStackTrace();}
+				
+	//=========================================
 	}
 
 	@Override

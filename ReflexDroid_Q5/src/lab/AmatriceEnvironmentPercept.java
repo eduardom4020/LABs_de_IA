@@ -1,5 +1,9 @@
 package lab;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import aima.core.agent.Agent;
 import aima.core.agent.impl.DynamicPercept;
 
@@ -75,7 +79,7 @@ public class AmatriceEnvironmentPercept extends DynamicPercept {
 		sb.append(getAgentLocation());
 		sb.append(", ");
 		sb.append(getLocationState());
-		sb.append("]");
+		sb.append("]");		
 		return sb.toString();
 	}
 

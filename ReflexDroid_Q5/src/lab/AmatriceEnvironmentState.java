@@ -1,5 +1,8 @@
 package lab;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
@@ -14,16 +17,25 @@ public class AmatriceEnvironmentState implements EnvironmentState, FullyObservab
 	private Map<Agent, String> agentLocations;
 	public int agentFront;	// 6: direita	2: abaixo	4: esquerda		8: acima
 	
+	
+	
+	private FileWriter fw;
+	
 	/**
 	 * Constructor
 	 */
 	public AmatriceEnvironmentState() {
 		state = new LinkedHashMap<String, AmatriceEnviroment.LocationState>();
 		agentLocations = new LinkedHashMap<Agent, String>();
-		initWorld();
+		
+		try 
+		{
+			initWorld();
+			
+		} catch (IOException e) {e.printStackTrace();}		
 	}
 
-	private void initWorld() {
+	private void initWorld() throws IOException {
 		boolean putHuman=false;
 		
 		Random rd = new Random();
@@ -61,6 +73,32 @@ public class AmatriceEnvironmentState implements EnvironmentState, FullyObservab
 			this.state.put("(14,19)", LocationState.Human);
 		}
 		this.state.put("(1,1)", LocationState.None);
+		
+	//iniciamos o output, para que possamos depois ler com a interface grafica:
+		fw = new FileWriter(new File("simulation_output"+ AmatriceProg.SIMULATION_NUMBER +".txt"));
+		
+		fw.write("-map_creation");
+		fw.write(System.lineSeparator());
+		
+		state.forEach((k,v)->
+		{
+			try{
+				
+				fw.write(k + ":" + v);
+				fw.write(System.lineSeparator());
+				
+			} catch(IOException e) { e.printStackTrace(); }
+		});
+		
+		fw.write("-steps");
+		fw.write(System.lineSeparator());
+		fw.write(""+AmatriceProg.SIMULATION_STEPS);
+		fw.write(System.lineSeparator());
+		fw.write("-agent_actions");
+		fw.write(System.lineSeparator());
+		
+		fw.close();
+	//=========================================================================
 	}
 	
 
