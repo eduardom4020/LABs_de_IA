@@ -26,6 +26,30 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 	public AmatriceEnviroment() {
 		envState = new AmatriceEnvironmentState();
 	}
+	
+	public void turn(int side)
+	{
+		if(side<0)
+		{
+			switch (envState.agentFront)
+			{
+				case 6: envState.agentFront = 2; break;
+				case 8: envState.agentFront = 6; break;
+				case 4: envState.agentFront = 8; break;
+				case 2: envState.agentFront = 4; break;
+			}
+		}
+		else
+		{
+			switch (envState.agentFront)
+			{
+				case 6: envState.agentFront = 8; break;
+				case 8: envState.agentFront = 4; break;
+				case 4: envState.agentFront = 2; break;
+				case 2: envState.agentFront = 6; break;
+			}
+		}
+	}
 
 	@Override
 	public void executeAction(Agent agent, Action action) {
@@ -34,6 +58,7 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 		String nextLocation;
 		LocationState state;
 		String action_for_emulation=null;
+		Random rd;
 		
 		if ((ACTION_MOVE == action)) 
 		{
@@ -67,38 +92,39 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 			//se a frente existe apenas um tile vazio, ou um humano, entao o agente pode andar
 			if((state == LocationState.None) || (state == LocationState.Human))
 			{
+				//adicionamos uma condicao para o agente girar randomicamente no
+				//lugar de andar. Independente de esbarrar ou nao num obstaculo. 
+				//Isso permite que ele adiquira mais possibilidades de movimento.
+				
+				rd = new Random();
+				if(rd.nextInt(100)%15 == 0)
+				{
+					rd = new Random();
+					if(rd.nextInt(100)%50 == 0)	{turn(-90);} else {turn(90);}
+					
+					action_for_emulation = "turned-" + envState.agentFront;
+				}
+				
 				envState.setAgentLocation(agent, nextLocation);
 				
 				action_for_emulation = "moved-";
 			}
 			else // se nao, o agente sofre uma rotacao em 90 graus randomicamente
 			{
-				Random rd = new Random();
-				if(rd.nextInt(1) == 1)
+				rd = new Random();
+				if(rd.nextInt(100)%50 == 0)	//50 de chance de girar para um dos lados
 				{
 				//rotaciona -90
-					switch (envState.agentFront)
-					{
-						case 6: envState.agentFront = 2; break;
-						case 8: envState.agentFront = 6; break;
-						case 4: envState.agentFront = 8; break;
-						case 2: envState.agentFront = 4; break;
-					}
+					turn(-90);
 				}
 				else
 				{
 				//rotaciona 90
-					switch (envState.agentFront)
-					{
-						case 6: envState.agentFront = 8; break;
-						case 8: envState.agentFront = 4; break;
-						case 4: envState.agentFront = 2; break;
-						case 2: envState.agentFront = 6; break;
-					}
+					turn(90);
 				}
+				
+				action_for_emulation = "turned-" + envState.agentFront;
 			}
-			
-			action_for_emulation = "turned-" + envState.agentFront;
 			
 			performanceMeasures.put(agent, getPerformanceMeasure(agent)-1);
 		}

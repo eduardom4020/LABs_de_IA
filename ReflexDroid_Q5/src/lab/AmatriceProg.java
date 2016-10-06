@@ -31,11 +31,10 @@ public class AmatriceProg {
 		env.step(SIMULATION_STEPS);
 		env.notifyViews("Performance=" + env.getPerformanceMeasure(agent));
 		
-	//executamos a simulacao:
-		MainWindow gui = new MainWindow();
+	//executamos a simulacao:		
 		try 
 		{			
-			gui.executeSimulation("simulation_output"+ AmatriceProg.SIMULATION_NUMBER +".txt");
+			MainWindow gui = new MainWindow("simulation_output"+ AmatriceProg.SIMULATION_NUMBER +".txt");
 			
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 	}

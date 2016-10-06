@@ -68,9 +68,9 @@ public class AmatriceEnvironmentState implements EnvironmentState, FullyObservab
 				}
 			}
 		}
-		if(!putHuman) //se nao colocou nenhum humano, colocamos ele na posicao 14x19
+		if(!putHuman) //se nao colocou nenhum humano, colocamos ele na posicao 13x18
 		{
-			this.state.put("(14,19)", LocationState.Human);
+			this.state.put("(13,18)", LocationState.Human);
 		}
 		this.state.put("(1,1)", LocationState.None);
 		

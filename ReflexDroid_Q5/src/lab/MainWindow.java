@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -18,19 +19,19 @@ public class MainWindow {
 
 	private JFrame frame = new JFrame("ReflexDroid");
 	
-//	public JLabel[] square = new JLabel[300]; //no total possuimos 300 quadrados
-	public JLabel square = new JLabel();
+	public JLabel[] square = new JLabel[300]; //no total possuimos 300 quadrados
+//	public JButton square = new JButton();
 
 	//construtor da mainwindow
-	public MainWindow() 
+	public MainWindow(String file_name) throws FileNotFoundException 
 	{
-		initialize();
+		initialize(file_name);
 	}
 	
 //	square[i].setBackground(Color.white);
 
 	//carrega as configuracoes iniciais da tela
-	private void initialize() 
+	private void initialize(String file_name) throws FileNotFoundException 
 	{
 		frame.setDefaultLookAndFeelDecorated(true);
 		frame = new JFrame();
@@ -40,21 +41,20 @@ public class MainWindow {
 		//e definindo cada celula como um quadrado 20x20.
 		frame.setBounds(0, 0, 300, 400);
 		
-		frame.setLayout(new GridLayout(15, 20));
+		frame.setLayout(new GridLayout(15, 20, 1, 1));
+	
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		for(int i=0; i<300; i++)
 		{
-//			square[i] = new JLabel(); //depois mudar cor por icone		
-//			square[i].setName("("+(300%15)+","+((int)300/20)+")");
-			
-//			frame.add(square[i]);	//os labels sao adicionados da esquerda para a direita, cima, baixo
-			frame.add(square);
+			square[i] = new JLabel();
+			square[i].setOpaque(true);
+
+			frame.add(square[i]);
 		}
 		
-//		frame.pack();		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		frame.setVisible(true);
+		this.executeSimulation(file_name);
 	}
 	
 	public void fillSquare(String coords, int R, int G, int B)
@@ -63,7 +63,8 @@ public class MainWindow {
 		Integer X = Integer.valueOf(parts[0].substring(1));
 		Integer Y = Integer.valueOf(parts[1].substring(0, parts[1].length()-1));
 		
-		frame.getComponentAt(X, Y).setBackground(new Color(R,G,B));
+		square[X*20 + Y].setBackground(new Color(R,G,B));
+		square[X*20 + Y].repaint();
 	}
 	
 	public void executeSimulation(String file_name) throws FileNotFoundException
@@ -83,7 +84,7 @@ public class MainWindow {
 		{
 			if(reader.ready())
 			{
-				if(reader.readLine() == "-map_creation")
+				if(reader.readLine().equals("-map_creation"))
 				{
 					for(int i=0; i<300; i++)
 					{
@@ -108,19 +109,16 @@ public class MainWindow {
 					}
 				}
 				
-				if(reader.readLine() == "-steps")
+				if(reader.readLine().equals("-steps"))
 				{
 					steps = Integer.valueOf(reader.readLine());
 				}
 				
-				if(reader.readLine() == "-agent_actions")
+				if(reader.readLine().equals("-agent_actions"))
 				{
 					for(int i=0; i<steps; i++)
 					{
-						if(lastAction == "rescued_human")
-						{
-							this.fillSquare(lastSquare, 0, 0, 0);
-						}
+						if(i>0) this.fillSquare(lastSquare, 255, 255, 255);
 						
 						parts = reader.readLine().split(":");
 						
@@ -132,7 +130,7 @@ public class MainWindow {
 						try 
 						{
 							frame.repaint();
-							TimeUnit.MILLISECONDS.sleep(300);
+							TimeUnit.MILLISECONDS.sleep(150);
 						} catch (InterruptedException e) {e.printStackTrace();}
 					}
 				}
