@@ -39,7 +39,7 @@ public class MainWindow {
 		
 		//o tamanho da tela serah 300x400, considerando que teremos uma matrix 15x20
 		//e definindo cada celula como um quadrado 20x20.
-		frame.setBounds(0, 0, 300, 400);
+		frame.setBounds(0, 0, 300, 350);
 		
 		frame.setLayout(new GridLayout(15, 20, 1, 1));
 	

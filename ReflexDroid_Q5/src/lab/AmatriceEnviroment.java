@@ -97,10 +97,10 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 				//Isso permite que ele adiquira mais possibilidades de movimento.
 				
 				rd = new Random();
-				if(rd.nextInt(100)%15 == 0)
+				if(rd.nextInt(100) < 15)
 				{
 					rd = new Random();
-					if(rd.nextInt(100)%50 == 0)	{turn(-90);} else {turn(90);}
+					if(rd.nextInt(100) < 50)	{turn(-90);} else {turn(90);}
 					
 					action_for_emulation = "turned-" + envState.agentFront;
 				}
@@ -112,7 +112,7 @@ public class AmatriceEnviroment extends AbstractEnvironment {
 			else // se nao, o agente sofre uma rotacao em 90 graus randomicamente
 			{
 				rd = new Random();
-				if(rd.nextInt(100)%50 == 0)	//50 de chance de girar para um dos lados
+				if(rd.nextInt(100) < 50)	//50 de chance de girar para um dos lados
 				{
 				//rotaciona -90
 					turn(-90);

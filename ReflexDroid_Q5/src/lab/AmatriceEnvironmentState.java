@@ -3,6 +3,7 @@ package lab;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
@@ -52,11 +53,11 @@ public class AmatriceEnvironmentState implements EnvironmentState, FullyObservab
 				}
 				else
 				{
-					if(rd.nextInt(100)%33 == 0) //possibilidade de existir parede
+					if(rd.nextInt(100) < 33) //possibilidade de existir parede
 					{
 						this.state.put("("+i+","+j+")", LocationState.Obstacle);
 					}
-					else if (rd.nextInt(100)%10 == 0) //possibilidade de existir humano
+					else if (rd.nextInt(100) < 10) //possibilidade de existir humano
 					{
 						this.state.put("("+i+","+j+")", LocationState.Human);
 						putHuman=true;
@@ -80,15 +81,30 @@ public class AmatriceEnvironmentState implements EnvironmentState, FullyObservab
 		fw.write("-map_creation");
 		fw.write(System.lineSeparator());
 		
-		state.forEach((k,v)->
+		Iterator<String> it = state.keySet().iterator();
+		
+		while(it.hasNext())
 		{
-			try{
-				
-				fw.write(k + ":" + v);
+			String k = it.next();
+			
+			try
+			{				
+				fw.write(k + ":" + state.get(k));
 				fw.write(System.lineSeparator());
 				
 			} catch(IOException e) { e.printStackTrace(); }
-		});
+		}
+		
+//	JAVA 8
+//		state.forEach((k,v)->
+//			{
+//			try{
+//				
+//				fw.write(k + ":" + v);
+//				fw.write(System.lineSeparator());
+//				
+//			} catch(IOException e) { e.printStackTrace(); }
+//		});
 		
 		fw.write("-steps");
 		fw.write(System.lineSeparator());
