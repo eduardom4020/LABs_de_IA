@@ -130,7 +130,7 @@ public class MainWindow {
 						try 
 						{
 							frame.repaint();
-							TimeUnit.MILLISECONDS.sleep(150);
+							TimeUnit.MILLISECONDS.sleep(50);
 						} catch (InterruptedException e) {e.printStackTrace();}
 					}
 				}
